@@ -36,7 +36,7 @@ func copyConn(src net.Conn, targetHost string, targetPort int64) {
 	<-done
 }
 
-func TcpPiper(c *Connexion) {
+func TcpConnector(c *Connexion) {
 	c.Protocol = "tcp"
 
 	if len(c.SourceHost) == 0 {

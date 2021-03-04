@@ -21,12 +21,16 @@ func main() {
 		TargetPort: 5000,
 	}
 
-	connectors.HttpPiper(c)
+	connectors.HttpConnector(c)
 }
 ```
 
-## Server Usage
-go run main.go --sourceHost=127.0.0.1 --sourcePort=3000 --targetHost=com.example.endpoint --targetPort=5000 --protocol=http
+## CLI Usage
+```
+$ go install github.com/sebpsdev/golibs/redirect
+
+$ redirect --sourceHost=127.0.0.1 --sourcePort=3000 --targetHost=com.example.endpoint --targetPort=5000 --protocol=http
+```
 
 ## Required arguments
 - sourcePort

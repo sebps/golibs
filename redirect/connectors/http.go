@@ -7,7 +7,7 @@ import (
 	"net/http/httputil"
 )
 
-func HttpPiper(c *Connexion) {
+func HttpConnector(c *Connexion) {
 	c.Protocol = "http"
 
 	if len(c.SourceHost) == 0 {

@@ -53,10 +53,10 @@ func main() {
 
 	switch protocol {
 	case "http":
-		connectors.HttpPiper(c)
+		connectors.HttpConnector(c)
 	case "tcp":
-		connectors.TcpPiper(c)
+		connectors.TcpConnector(c)
 	default:
-		connectors.HttpPiper(c)
+		connectors.HttpConnector(c)
 	}
 }
