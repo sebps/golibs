@@ -1,4 +1,4 @@
-# Generic library
+# Generic
 Some methods for datastructures of elements of type interface{} ( passed by empty interface )
 
 ## Examples

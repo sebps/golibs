@@ -1,4 +1,5 @@
-# Basic lib to implicitely redirect an incoming connexion to a target endpoint
+# Redirect
+Basic lib to implicitely redirect an incoming connexion to a target endpoint
 
 ## Protocol supported
 - http 
