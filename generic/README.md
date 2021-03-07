@@ -9,6 +9,7 @@ package main
 import (
   "github.com/sebpsdev/golibs/generic/arrays"
   "github.com/sebpsdev/golibs/generic/maps"
+  "github.com/sebpsdev/golibs/generic/types"
   "fmt"
 )
 
@@ -42,6 +43,21 @@ func main() {
   values = maps.Values(m)
   fmt.Println(values)
   // expect "one","two","three","four"
+
+  // Types
+  s := []interface{}{1,4,2,7}
+  var genericS []interface{} 
+  genericS = types.GeneralizeSlice(s)
+  genericSType := fmt.Sprintf("%T", genericS)
+  fmt.Println(genericSType)
+  // expect []interface{}
+    
+  m := map[interface{}]interface{}{1:1,2:2}
+  var genericM []interface{} 
+  genericM = types.GeneralizeMap(m)
+  genericMType := fmt.Sprintf("%T", genericM)
+  fmt.Println(genericMType)
+  // expect map[interface{}]interface{}
 }
 
 ```
