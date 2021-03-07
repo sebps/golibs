@@ -1,21 +1,46 @@
 package maps
 
-func Keys(m map[interface{}]interface{}) []interface{} {
-	keys := make([]interface{}, 0, len(m))
+import (
+	"errors"
+	"reflect"
+)
 
-	for k, _ := range m {
-		keys = append(keys, k)
+func KeysValues(input interface{}) (interface{}, interface{}, error) {
+	m := reflect.ValueOf(input)
+	if m.Kind() != reflect.Map {
+		return nil, nil, errors.New("input is not a map")
 	}
 
-	return keys
+	mTyp := reflect.TypeOf(input)
+	kTyp := mTyp.Key()
+	vTyp := mTyp.Elem()
+
+	ks := reflect.MakeSlice(reflect.SliceOf(kTyp), 0, m.Len())
+	vs := reflect.MakeSlice(reflect.SliceOf(vTyp), 0, m.Len())
+
+	for _, k := range m.MapKeys() {
+		v := m.MapIndex(k)
+		ks = reflect.Append(ks, k)
+		vs = reflect.Append(vs, v)
+	}
+
+	return ks.Interface(), vs.Interface(), nil
 }
 
-func Values(m map[interface{}]interface{}) []interface{} {
-	values := make([]interface{}, 0, len(m))
-
-	for _, v := range m {
-		values = append(values, v)
+func Keys(input interface{}) (interface{}, error) {
+	keys, _, err := KeysValues(input)
+	if err != nil {
+		return nil, err
 	}
 
-	return values
+	return keys, nil
+}
+
+func Values(input interface{}) (interface{}, error) {
+	_, values, err := KeysValues(input)
+	if err != nil {
+		return nil, err
+	}
+
+	return values, nil
 }
