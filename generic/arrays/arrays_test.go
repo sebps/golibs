@@ -6,34 +6,44 @@ import (
 	"testing"
 )
 
+func getIntPointer(x int) *int {
+	return &x
+}
+
 func TestSort(t *testing.T) {
+	pointers := map[int]*int{
+		1: getIntPointer(1),
+		2: getIntPointer(2),
+		3: getIntPointer(3),
+		4: getIntPointer(4),
+	}
 	var tests = []struct {
-		m    []interface{}
-		want []interface{}
+		m    interface{}
+		want interface{}
 	}{
 		{
-			m:    []interface{}{true, false, false, true},
-			want: []interface{}{false, false, true, true},
+			m:    interface{}([]bool{true, false, false, true}),
+			want: interface{}([]bool{false, false, true, true}),
 		},
 		{
-			m:    []interface{}{"delta", "alpha", "beta", "gamma"},
-			want: []interface{}{"alpha", "beta", "delta", "gamma"},
+			m:    interface{}([]string{"delta", "alpha", "beta", "gamma"}),
+			want: interface{}([]string{"alpha", "beta", "delta", "gamma"}),
 		},
 		{
-			m:    []interface{}{3, 1, 4, 2},
-			want: []interface{}{1, 2, 3, 4},
+			m:    interface{}([]int{3, 1, 4, 2}),
+			want: interface{}([]int{1, 2, 3, 4}),
 		},
 		{
-			m:    []interface{}{3.3, 1.2, 4.5, 2.6},
-			want: []interface{}{1.2, 2.6, 3.3, 4.5},
+			m:    interface{}([]float32{3.3, 1.2, 4.5, 2.6}),
+			want: interface{}([]float32{1.2, 2.6, 3.3, 4.5}),
 		},
 		{
-			m:    []interface{}{complex(1, 1), complex(0, 1), complex(2, 2), complex(0, 0)},
-			want: []interface{}{complex(0, 0), complex(0, 1), complex(1, 1), complex(2, 2)},
+			m:    interface{}([]complex64{complex(1, 1), complex(0, 1), complex(2, 2), complex(0, 0)}),
+			want: interface{}([]complex64{complex(0, 0), complex(0, 1), complex(1, 1), complex(2, 2)}),
 		},
 		{
-			m:    []interface{}{complex(1, 1), complex(0, 1), complex(2, 2), complex(0, 0), complex(-2, 2)},
-			want: []interface{}{complex(0, 0), complex(0, 1), complex(1, 1), complex(2, 2), complex(-2, 2)},
+			m:    interface{}([]*int{pointers[3], pointers[1], pointers[4], pointers[2]}),
+			want: interface{}([]*int{pointers[1], pointers[2], pointers[3], pointers[4]}),
 		},
 	}
 
