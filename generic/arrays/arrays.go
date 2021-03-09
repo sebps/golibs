@@ -7,6 +7,71 @@ import (
 	"sort"
 )
 
+func Sort(input interface{}, compare func(a interface{}, b interface{}) bool) (interface{}, error) {
+	s := reflect.ValueOf(input)
+	if s.Kind() != reflect.Slice {
+		return nil, errors.New("input is not a slice")
+	}
+
+	eKind := reflect.TypeOf(input).Elem().Kind()
+
+	if compare == nil {
+		switch eKind {
+		case reflect.Invalid, reflect.Array, reflect.Chan, reflect.Func, reflect.Interface,
+			reflect.Map, reflect.Slice, reflect.Struct, reflect.UnsafePointer:
+			return nil, errors.New("input collection is not sortable as it has no comparable elements")
+		}
+	}
+
+	typedSlice := TypedSlice{
+		value:   s,
+		kind:    eKind,
+		compare: compare,
+	}
+
+	sort.Sort(typedSlice)
+
+	return typedSlice.value.Interface(), nil
+}
+
+type TypedSlice struct {
+	value   reflect.Value
+	kind    reflect.Kind
+	compare func(a interface{}, b interface{}) bool
+}
+
+func (t TypedSlice) Len() int {
+	return t.value.Len()
+}
+
+func (t TypedSlice) Less(i, j int) bool {
+	iElem := t.value.Index(i)
+	jElem := t.value.Index(j)
+	iValue := iElem.Interface()
+	jValue := jElem.Interface()
+
+	if t.compare != nil {
+		return t.compare(iValue, jValue)
+	}
+
+	kindClass := getKindClass(t.kind)
+	if kindClass != "pointer" {
+		return compare(kindClass, iValue, jValue)
+	} else {
+		ptrKind := iElem.Type().Elem().Kind()
+		ptrKindClass := getKindClass(ptrKind)
+		iPtrValue := iElem.Elem().Interface()
+		jPtrValue := jElem.Elem().Interface()
+
+		return compare(ptrKindClass, iPtrValue, jPtrValue)
+	}
+}
+
+func (t TypedSlice) Swap(i, j int) {
+	swap := reflect.Swapper(t.value.Interface())
+	swap(i, j)
+}
+
 func getKindClass(kind reflect.Kind) string {
 	switch kind {
 	case reflect.Bool:
@@ -29,13 +94,13 @@ func getKindClass(kind reflect.Kind) string {
 	}
 }
 
-func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
+func compare(kindClass string, a, b interface{}) bool {
 	switch kindClass {
 	case "number":
 		var iCast float64
 		var jCast float64
 
-		switch v := iValue.(type) {
+		switch v := a.(type) {
 		case int:
 			iCast = float64(v)
 		case int8:
@@ -62,7 +127,7 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 			iCast = v
 		}
 
-		switch v := jValue.(type) {
+		switch v := b.(type) {
 		case int:
 			jCast = float64(v)
 		case int8:
@@ -94,12 +159,12 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 		var iCast string
 		var jCast string
 
-		switch v := iValue.(type) {
+		switch v := a.(type) {
 		case string:
 			iCast = v
 		}
 
-		switch v := jValue.(type) {
+		switch v := b.(type) {
 		case string:
 			jCast = v
 		}
@@ -109,14 +174,14 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 		var iCast complex128
 		var jCast complex128
 
-		switch v := iValue.(type) {
+		switch v := a.(type) {
 		case complex64:
 			iCast = complex128(v)
 		case complex128:
 			iCast = v
 		}
 
-		switch v := jValue.(type) {
+		switch v := b.(type) {
 		case complex64:
 			jCast = complex128(v)
 		case complex128:
@@ -131,7 +196,7 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 		var iCast int
 		var jCast int
 
-		switch v := iValue.(type) {
+		switch v := a.(type) {
 		case bool:
 			if v == false {
 				iCast = 0
@@ -140,7 +205,7 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 			}
 		}
 
-		switch v := jValue.(type) {
+		switch v := b.(type) {
 		case bool:
 			if v == false {
 				jCast = 0
@@ -153,61 +218,4 @@ func compare(kindClass string, i, j int, iValue, jValue interface{}) bool {
 	}
 
 	return false
-}
-
-type TypedSlice struct {
-	value reflect.Value
-	kind  reflect.Kind
-}
-
-func (t TypedSlice) Len() int {
-	return t.value.Len()
-}
-
-func (t TypedSlice) Less(i, j int) bool {
-	iElem := t.value.Index(i)
-	jElem := t.value.Index(j)
-	iValue := iElem.Interface()
-	jValue := jElem.Interface()
-
-	kindClass := getKindClass(t.kind)
-	if kindClass != "pointer" {
-		return compare(kindClass, i, j, iValue, jValue)
-	} else {
-		ptrKind := iElem.Type().Elem().Kind()
-		ptrKindClass := getKindClass(ptrKind)
-		iPtrValue := iElem.Elem().Interface()
-		jPtrValue := jElem.Elem().Interface()
-
-		return compare(ptrKindClass, i, j, iPtrValue, jPtrValue)
-	}
-}
-
-func (t TypedSlice) Swap(i, j int) {
-	swap := reflect.Swapper(t.value.Interface())
-	swap(i, j)
-}
-
-func Sort(input interface{}) (interface{}, error) {
-	s := reflect.ValueOf(input)
-	if s.Kind() != reflect.Slice {
-		return nil, errors.New("input is not a slice")
-	}
-
-	eKind := reflect.TypeOf(input).Elem().Kind()
-
-	switch eKind {
-	case reflect.Invalid, reflect.Array, reflect.Chan, reflect.Func, reflect.Interface,
-		reflect.Map, reflect.Slice, reflect.Struct, reflect.UnsafePointer:
-		return nil, errors.New("input collection is not sortable as it has no comparable elements")
-	}
-
-	typedSlice := TypedSlice{
-		value: s,
-		kind:  eKind,
-	}
-
-	sort.Sort(typedSlice)
-
-	return typedSlice.value.Interface(), nil
 }
