@@ -26,32 +26,10 @@ func main() {
 	fmt.Println(sStr)
 	// expect "alpha","beta","delta","gamma"
 
-	func customLess(a interface{}, b interface{}) bool {
-		aHighPriority := a.(struct {
-			highPriority int
-			lowPriority  int
-		}).highPriority
-		aLowPriority := a.(struct {
-			highPriority int
-			lowPriority  int
-		}).lowPriority
-		bHighPriority := b.(struct {
-			highPriority int
-			lowPriority  int
-		}).highPriority
-		bLowPriority := b.(struct {
-			highPriority int
-			lowPriority  int
-		}).lowPriority
-
-		if aHighPriority != bHighPriority {
-			return aHighPriority < bHighPriority
-		} else {
-			return aLowPriority < bLowPriority
-		}
-	}
-
-	customSlice := map[int]interface{}{
+	customSlice := []struct {
+		highPriority int
+		lowPriority  int
+	}{
 		struct {
 			highPriority int
 			lowPriority  int
@@ -79,12 +57,12 @@ func main() {
 		}{
 			highPriority: 1,
 			lowPriority:  1,
-		}
+		},
 	}
 
-	sort.Sort(customSlice, customLess)
+	arrays.Sort(customSlice, customLess)
 	fmt.Println(customSlice)
-	// expect		
+	// expect
 	// {
 	// 	highPriority: 1,
 	// 	lowPriority:  1,
@@ -101,7 +79,7 @@ func main() {
 	// 	highPriority: 2,
 	// 	lowPriority:  2,
 	// }
-	
+
 	// Maps
 	mIntStr := map[int]string{
 		1: "one",
@@ -128,5 +106,30 @@ func main() {
 	genericMType := fmt.Sprintf("%T", genericM)
 	fmt.Println(genericMType)
 	// expect map[interface{}]interface{}
+}
+
+func customLess(a interface{}, b interface{}) bool {
+	aHighPriority := a.(struct {
+		highPriority int
+		lowPriority  int
+	}).highPriority
+	aLowPriority := a.(struct {
+		highPriority int
+		lowPriority  int
+	}).lowPriority
+	bHighPriority := b.(struct {
+		highPriority int
+		lowPriority  int
+	}).highPriority
+	bLowPriority := b.(struct {
+		highPriority int
+		lowPriority  int
+	}).lowPriority
+
+	if aHighPriority != bHighPriority {
+		return aHighPriority < bHighPriority
+	} else {
+		return aLowPriority < bLowPriority
+	}
 }
 ```
