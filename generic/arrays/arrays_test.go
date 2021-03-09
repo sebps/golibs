@@ -150,7 +150,7 @@ func TestSort(t *testing.T) {
 						highPriority int
 						lowPriority  int
 					}).highPriority
-					bLowPriority := a.(struct {
+					bLowPriority := b.(struct {
 						highPriority int
 						lowPriority  int
 					}).lowPriority

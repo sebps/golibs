@@ -18,14 +18,90 @@ import (
 func main() {
 	// Arrays
 	sInt := []int{1, 4, 2, 7}
-	arrays.Sort(sInt)
+	arrays.Sort(sInt, nil)
 	fmt.Println(sInt)
 	// expect 1,2,4,7
 	sStr := []string{"delta", "alpha", "beta", "gamma"}
-	arrays.Sort(sStr)
+	arrays.Sort(sStr, nil)
 	fmt.Println(sStr)
 	// expect "alpha","beta","delta","gamma"
 
+	func customLess(a interface{}, b interface{}) bool {
+		aHighPriority := a.(struct {
+			highPriority int
+			lowPriority  int
+		}).highPriority
+		aLowPriority := a.(struct {
+			highPriority int
+			lowPriority  int
+		}).lowPriority
+		bHighPriority := b.(struct {
+			highPriority int
+			lowPriority  int
+		}).highPriority
+		bLowPriority := b.(struct {
+			highPriority int
+			lowPriority  int
+		}).lowPriority
+
+		if aHighPriority != bHighPriority {
+			return aHighPriority < bHighPriority
+		} else {
+			return aLowPriority < bLowPriority
+		}
+	}
+
+	customSlice := map[int]interface{}{
+		struct {
+			highPriority int
+			lowPriority  int
+		}{
+			highPriority: 2,
+			lowPriority:  1,
+		},
+		struct {
+			highPriority int
+			lowPriority  int
+		}{
+			highPriority: 2,
+			lowPriority:  2,
+		},
+		struct {
+			highPriority int
+			lowPriority  int
+		}{
+			highPriority: 1,
+			lowPriority:  2,
+		},
+		struct {
+			highPriority int
+			lowPriority  int
+		}{
+			highPriority: 1,
+			lowPriority:  1,
+		}
+	}
+
+	sort.Sort(customSlice, customLess)
+	fmt.Println(customSlice)
+	// expect		
+	// {
+	// 	highPriority: 1,
+	// 	lowPriority:  1,
+	// },
+	// {
+	// 	highPriority: 1,
+	// 	lowPriority:  2,
+	// },
+	// {
+	// 	highPriority: 2,
+	// 	lowPriority:  1,
+	// },
+	// {
+	// 	highPriority: 2,
+	// 	lowPriority:  2,
+	// }
+	
 	// Maps
 	mIntStr := map[int]string{
 		1: "one",
