@@ -156,9 +156,9 @@ func TestSort(t *testing.T) {
 					}).lowPriority
 
 					if aHighPriority != bHighPriority {
-						return aHighPriority <= bHighPriority
+						return aHighPriority < bHighPriority
 					} else {
-						return aLowPriority <= bLowPriority
+						return aLowPriority < bLowPriority
 					}
 				},
 			},

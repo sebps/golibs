@@ -154,7 +154,7 @@ func less(kindClass string, a, b interface{}) bool {
 			jCast = v
 		}
 
-		return iCast <= jCast
+		return iCast < jCast
 	case "string":
 		var iCast string
 		var jCast string
@@ -169,7 +169,7 @@ func less(kindClass string, a, b interface{}) bool {
 			jCast = v
 		}
 
-		return iCast <= jCast
+		return iCast < jCast
 	case "complex":
 		var iCast complex128
 		var jCast complex128
@@ -191,7 +191,7 @@ func less(kindClass string, a, b interface{}) bool {
 		iDist := math.Pow(real(iCast), 2) + math.Pow(imag(iCast), 2)
 		jDist := math.Pow(real(jCast), 2) + math.Pow(imag(jCast), 2)
 
-		return iDist <= jDist
+		return iDist < jDist
 	case "boolean":
 		var iCast int
 		var jCast int
@@ -214,7 +214,7 @@ func less(kindClass string, a, b interface{}) bool {
 			}
 		}
 
-		return iCast <= jCast
+		return iCast < jCast
 	}
 
 	return false
