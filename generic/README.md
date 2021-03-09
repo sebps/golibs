@@ -1,7 +1,7 @@
 # Generic
 Some untyped generic methods for datastructures.
 No specific type is expected as argument for the methods. 
-Errors can however be returned in case of inappropriate underlying type for the called behavior ( e.g calling "array.sort" method on a slice of struct elements would result in an error as struct is not a comparable type )
+Errors can however be returned in case of inappropriate underlying type for the called behavior ( e.g calling "array.sort" method on a slice of struct elements would result in an error as struct is not a comparable type and no custom less function is provided as second parameter )
 
 ## Examples
 
