@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-func Sort(input interface{}, compare func(a interface{}, b interface{}) bool) (interface{}, error) {
+func Sort(input interface{}, less func(a interface{}, b interface{}) bool) (interface{}, error) {
 	s := reflect.ValueOf(input)
 	if s.Kind() != reflect.Slice {
 		return nil, errors.New("input is not a slice")
@@ -15,7 +15,7 @@ func Sort(input interface{}, compare func(a interface{}, b interface{}) bool) (i
 
 	eKind := reflect.TypeOf(input).Elem().Kind()
 
-	if compare == nil {
+	if less == nil {
 		switch eKind {
 		case reflect.Invalid, reflect.Array, reflect.Chan, reflect.Func, reflect.Interface,
 			reflect.Map, reflect.Slice, reflect.Struct, reflect.UnsafePointer:
@@ -24,9 +24,9 @@ func Sort(input interface{}, compare func(a interface{}, b interface{}) bool) (i
 	}
 
 	typedSlice := TypedSlice{
-		value:   s,
-		kind:    eKind,
-		compare: compare,
+		value: s,
+		kind:  eKind,
+		less:  less,
 	}
 
 	sort.Sort(typedSlice)
@@ -35,9 +35,9 @@ func Sort(input interface{}, compare func(a interface{}, b interface{}) bool) (i
 }
 
 type TypedSlice struct {
-	value   reflect.Value
-	kind    reflect.Kind
-	compare func(a interface{}, b interface{}) bool
+	value reflect.Value
+	kind  reflect.Kind
+	less  func(a interface{}, b interface{}) bool
 }
 
 func (t TypedSlice) Len() int {
@@ -50,20 +50,20 @@ func (t TypedSlice) Less(i, j int) bool {
 	iValue := iElem.Interface()
 	jValue := jElem.Interface()
 
-	if t.compare != nil {
-		return t.compare(iValue, jValue)
+	if t.less != nil {
+		return t.less(iValue, jValue)
 	}
 
 	kindClass := getKindClass(t.kind)
 	if kindClass != "pointer" {
-		return compare(kindClass, iValue, jValue)
+		return less(kindClass, iValue, jValue)
 	} else {
 		ptrKind := iElem.Type().Elem().Kind()
 		ptrKindClass := getKindClass(ptrKind)
 		iPtrValue := iElem.Elem().Interface()
 		jPtrValue := jElem.Elem().Interface()
 
-		return compare(ptrKindClass, iPtrValue, jPtrValue)
+		return less(ptrKindClass, iPtrValue, jPtrValue)
 	}
 }
 
@@ -94,7 +94,7 @@ func getKindClass(kind reflect.Kind) string {
 	}
 }
 
-func compare(kindClass string, a, b interface{}) bool {
+func less(kindClass string, a, b interface{}) bool {
 	switch kindClass {
 	case "number":
 		var iCast float64
