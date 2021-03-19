@@ -14,28 +14,30 @@ type Subscriber interface {
 ## Example
 
 ```go
-package main
+  package main
 
-import (
-	"fmt"
-	"github.com/sebpsdev/golibs/eventbus"
-)
+  import (
+    "fmt"
+    "github.com/sebpsdev/golibs/eventbus"
+    "time"
+  )
 
-func main() {
   type Publisher struct{}
   type Subscriber struct{}
-  
+
   func (s *Subscriber) HandleEvent(e eventbus.Event) (bool, string, string) {
-    fmt.Println("event received : %s", e.name)
+    fmt.Printf("event received : %s\n", e.Name)
+    return true, "success", "event processed"
   }
 
-  eb := &eventbus.Eventbus{}
-  subscriber := &Subscriber{}
-  publisher := &Publisher{}
+  func main() {
+    eb := &eventbus.EventBus{}
+    subscriber := &Subscriber{}
+    publisher := &Publisher{}
 
-  eb.Subscribe("EventName", subscriber)
-  eb.Publish("EventName", publisher)
-
+    eb.Subscribe("EventName", subscriber)
+    eb.Publish("EventName", nil, publisher, time.Now().Unix())
+  }
   // expect log : "event received : EventName"
 }
 ```
