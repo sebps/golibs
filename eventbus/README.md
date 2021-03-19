@@ -18,7 +18,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/sebpsdev/golibs/generic/eventbus"
+	"github.com/sebpsdev/golibs/eventbus"
 )
 
 func main() {
