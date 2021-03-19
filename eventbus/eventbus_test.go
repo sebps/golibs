@@ -31,10 +31,10 @@ func TestPublish(t *testing.T) {
 			},
 			want: []*Event{
 				&Event{
-					name:      "event",
-					payload:   nil,
-					publisher: nil,
-					timestamp: time.Now().Unix(),
+					Name:      "event",
+					Payload:   nil,
+					Publisher: nil,
+					Timestamp: time.Now().Unix(),
 				},
 			},
 		},
@@ -51,8 +51,8 @@ func TestPublish(t *testing.T) {
 				t.Errorf("publish not ok")
 			}
 
-			if !reflect.DeepEqual(tt.have.eb.eventStack, tt.want) {
-				t.Errorf("got %#v, want %#v", tt.have.eb.eventStack, tt.want)
+			if !reflect.DeepEqual(tt.have.eb.EventStack, tt.want) {
+				t.Errorf("got %#v, want %#v", tt.have.eb.EventStack, tt.want)
 			}
 		})
 	}
@@ -76,10 +76,10 @@ func TestSubscribe(t *testing.T) {
 			},
 			want: []Event{
 				Event{
-					name:      "event",
-					payload:   nil,
-					publisher: nil,
-					timestamp: time.Now().Unix(),
+					Name:      "event",
+					Payload:   nil,
+					Publisher: nil,
+					Timestamp: time.Now().Unix(),
 				},
 			},
 		},
@@ -129,10 +129,10 @@ func TestUnsubscribe(t *testing.T) {
 			},
 			want: []Event{
 				Event{
-					name:      "event",
-					payload:   nil,
-					publisher: nil,
-					timestamp: time.Now().Unix(),
+					Name:      "event",
+					Payload:   nil,
+					Publisher: nil,
+					Timestamp: time.Now().Unix(),
 				},
 			},
 		},
