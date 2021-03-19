@@ -79,6 +79,11 @@ func main() {
 	// 	highPriority: 2,
 	// 	lowPriority:  2,
 	// }
+	index, found, _ := arrays.Find(1, sInt)
+	fmt.Println(found)
+	// expect true
+	fmt.Println(index)
+	// expect 0
 
 	// Maps
 	mIntStr := map[int]string{

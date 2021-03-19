@@ -34,6 +34,22 @@ func Sort(input interface{}, less func(a interface{}, b interface{}) bool) (inte
 	return typedSlice.value.Interface(), nil
 }
 
+func Find(element interface{}, input interface{}) (int, bool, error) {
+	s := reflect.ValueOf(input)
+	if s.Kind() != reflect.Slice {
+		return -1, false, errors.New("input is not a slice")
+	}
+
+	for i := 0; i < s.Len(); i++ {
+		e := s.Index(i)
+		if reflect.DeepEqual(element, e.Interface()) {
+			return i, true, nil
+		}
+	}
+
+	return -1, false, nil
+}
+
 type TypedSlice struct {
 	value reflect.Value
 	kind  reflect.Kind

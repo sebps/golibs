@@ -15,6 +15,7 @@ Some untyped generic methods for datastructures
 
 #### arrays
 - func Sort(input interface{}, less func(a interface{}, b interface{}) bool) (interface{}, error)
+- func Find(element interface{}, input interface{}) (index, bool, error)
 
 #### maps
 - func Keys(input interface{}) (interface{}, error)

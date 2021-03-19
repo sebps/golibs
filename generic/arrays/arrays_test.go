@@ -182,3 +182,76 @@ func TestSort(t *testing.T) {
 		})
 	}
 }
+
+func TestFind(t *testing.T) {
+	var tests = []struct {
+		have struct {
+			slice   interface{}
+			element interface{}
+		}
+		want struct {
+			index int
+			found bool
+			err   error
+		}
+	}{
+		{
+			have: struct {
+				slice   interface{}
+				element interface{}
+			}{
+				slice:   interface{}([]int{1, 2, 3, 4}),
+				element: 1,
+			},
+			want: struct {
+				index int
+				found bool
+				err   error
+			}{
+				index: 0,
+				found: true,
+				err:   nil,
+			},
+		},
+		{
+			have: struct {
+				slice   interface{}
+				element interface{}
+			}{
+				slice:   interface{}([]int{1, 2, 3, 4}),
+				element: 5,
+			},
+			want: struct {
+				index int
+				found bool
+				err   error
+			}{
+				index: -1,
+				found: false,
+				err:   nil,
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("%d", tt.have.slice)
+		t.Run(testname, func(t *testing.T) {
+			index, found, err := Find(tt.have.element, tt.have.slice)
+			if err != nil {
+				t.Errorf("got error %#v, want %#v", err, tt.want)
+			}
+			result := struct {
+				index int
+				found bool
+				err   error
+			}{
+				index: index,
+				found: found,
+				err:   err,
+			}
+			if !reflect.DeepEqual(result, tt.want) {
+				t.Errorf("got %#v, want %#v", result, tt.want)
+			}
+		})
+	}
+}
