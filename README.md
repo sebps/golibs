@@ -33,7 +33,3 @@ Some untyped generic methods for datastructures
 #### types
 - func GeneralizeSlice(input interface{}) ([]interface{}, error)
 - func GeneralizeMap(input interface{}) (map[interface{}]interface{}, error)
-
-#### eventbus
-- func Sort(input interface{}, less func(a interface{}, b interface{}) bool) (interface{}, error)
-- func Find(element interface{}, input interface{}) (index, bool, error)
