@@ -1,7 +1,18 @@
 # Eventbus
-Some generic event bus implementation.
+Some generic event bus implementation providing event publishing / subscribing capabilities.
+
+## Usage
+The event bus allows any structure to subscribe to a labelled event as long as it implements the following Subscriber interface.
+No specific interface is required for a structure to publish to the event bus.
+
+```go
+type Subscriber interface {
+	HandleEvent(e Event) (success bool, status string, message string)
+}
+```
 
 ## Example
+
 ```go
 package main
 
