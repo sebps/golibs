@@ -1,11 +1,3 @@
-# Generic
-Some untyped generic methods for datastructures.
-No specific type is expected as argument for the methods. 
-Errors can however be returned in case of inappropriate underlying type for the called behavior ( e.g calling "array.sort" method on a slice of struct elements would result in an error as struct is not a comparable type and no custom less function is provided as second parameter )
-
-## Examples
-
-```go
 package main
 
 import (
@@ -93,9 +85,6 @@ func main() {
 	values, _ := maps.Values(mIntStr)
 	fmt.Println(values)
 	// expect "one","two","three","four" ( order can change )
-	found, _ := maps.FindKey(1, mIntStr)
-	fmt.Println(found)
-	// expect true
 
 	// Types
 	s := []int{1, 4, 2, 7}
@@ -135,4 +124,3 @@ func customLess(a interface{}, b interface{}) bool {
 		return aLowPriority < bLowPriority
 	}
 }
-```

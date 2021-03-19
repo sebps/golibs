@@ -44,3 +44,18 @@ func Values(input interface{}) (interface{}, error) {
 
 	return values, nil
 }
+
+func FindKey(key interface{}, input interface{}) (bool, error) {
+	m := reflect.ValueOf(input)
+	if m.Kind() != reflect.Map {
+		return false, errors.New("input is not a map")
+	}
+
+	for _, k := range m.MapKeys() {
+		if reflect.DeepEqual(k.Interface(), key) {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}

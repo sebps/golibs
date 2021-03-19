@@ -11,7 +11,7 @@ Basic lib to implicitely redirect an incoming connexion to a target endpoint
 
 
 ## Generic 
-Some untyped generic methods for datastructures.
+Some untyped generic methods for datastructures
 
 #### arrays
 - func Sort(input interface{}, less func(a interface{}, b interface{}) bool) (interface{}, error)
@@ -20,6 +20,7 @@ Some untyped generic methods for datastructures.
 - func Keys(input interface{}) (interface{}, error)
 - func Values(input interface{}) (interface{}, error)
 - func KeysValues(input interface{}) (interface{}, interface{}, error)
+- func FindKey(key interface{}, input interface{}) (bool, error)
 
 #### types
 - func GeneralizeSlice(input interface{}) ([]interface{}, error)
