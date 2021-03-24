@@ -35,4 +35,4 @@ Some untyped generic methods for datastructures
 - func GeneralizeMap(input interface{}) (map[interface{}]interface{}, error)
 
 #### utils
-- func Traverse(input interface{}, handler func(i interface{}), handleBeforeTraverse bool, handleAfterTraverse bool) error)
+- func Traverse(input interface{}, handler func(i interface{}), handleBeforeTraverse bool, handleAfterTraverse bool) error
