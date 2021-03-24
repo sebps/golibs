@@ -33,3 +33,6 @@ Some untyped generic methods for datastructures
 #### types
 - func GeneralizeSlice(input interface{}) ([]interface{}, error)
 - func GeneralizeMap(input interface{}) (map[interface{}]interface{}, error)
+
+#### utils
+- func Traverse(input interface{}, handler func(i interface{}), handleBeforeTraverse bool, handleAfterTraverse bool) error)
