@@ -10,7 +10,7 @@ import (
 func MigrateDomain(domain string, sourceAccountID string, sourceSecretKey string, targetAccountID string, targetSecretKey string) (string, string, error) {
 	mySession := session.Must(session.NewSession())
 
-	sourceClient := route53domains.New(mySession, aws.NewConfig().WithRegion("us-west-2").WithCredentials(credentials.NewStaticCredentials(sourceAccountID, sourceSecretKey, "")))
+	sourceClient := route53domains.New(mySession, aws.NewConfig().WithCredentials(credentials.NewStaticCredentials(sourceAccountID, sourceSecretKey, "")))
 	transferParams := &route53domains.TransferDomainToAnotherAwsAccountInput{
 		AccountId:  &targetAccountID,
 		DomainName: &domain,
@@ -23,7 +23,7 @@ func MigrateDomain(domain string, sourceAccountID string, sourceSecretKey string
 		return "", "", err
 	}
 
-	targetClient := route53domains.New(mySession, aws.NewConfig().WithRegion("us-west-2").WithCredentials(credentials.NewStaticCredentials(targetAccountID, targetSecretKey, "")))
+	targetClient := route53domains.New(mySession, aws.NewConfig().WithCredentials(credentials.NewStaticCredentials(targetAccountID, targetSecretKey, "")))
 	acceptParams := &route53domains.AcceptDomainTransferFromAnotherAwsAccountInput{
 		DomainName: &domain,
 		Password:   transferOutput.Password,
@@ -37,7 +37,7 @@ func MigrateDomain(domain string, sourceAccountID string, sourceSecretKey string
 func GetMigrateOperation(operationID string, accountID string, secretKey string) (string, error) {
 	mySession := session.Must(session.NewSession())
 
-	client := route53domains.New(mySession, aws.NewConfig().WithRegion("us-west-2").WithCredentials(credentials.NewStaticCredentials(accountID, secretKey, "")))
+	client := route53domains.New(mySession, aws.NewConfig().WithCredentials(credentials.NewStaticCredentials(accountID, secretKey, "")))
 	operationDetailParams := &route53domains.GetOperationDetailInput{
 		OperationId: &operationID,
 	}
