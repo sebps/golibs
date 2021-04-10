@@ -1,2 +1,2 @@
 # Cloud
-Some utilitary lib for cloud operations.
+Some lib for cloud operations.
