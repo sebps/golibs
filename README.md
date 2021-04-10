@@ -36,3 +36,19 @@ Some untyped generic methods for datastructures
 
 #### utils
 - func Traverse(input interface{}, handler func(i interface{}), handleBeforeTraverse bool, handleAfterTraverse bool) error
+
+## Cloud 
+Some methods for cloud operations
+
+#### aws
+- func MigrateDomain(domain string, targetAccountID string, sourceAccessKeyID string, sourceSecretKey string, targetAccessKeyID string, targetSecretKey string) (string, error)
+- func TransferDomain(domain string, targetAccountID string, accessKeyID string, secretKey string) (string, string, error)
+- func AcceptDomainTransfer(domain string, password string, accessKeyID string, secretKey string) (string, error)
+- func CancelDomainTransfer(domain string, accessKeyID string, secretKey string) (string, error)
+- func GetDomainOperationStatus(operationID string, accessKeyID string, secretKey string) (string, error)
+- func ListDomainOperations(accessKeyID string, secretKey string) ([]*route53domains.OperationSummary, error)
+- func MigrateHostedZones(domain string, sourceAccessKeyID string, sourceSecretKey string, targetAccessKeyID string, targetSecretKey string) ([]string, error)
+- func TransferHostedZone(domain string, hostedZoneID string, sourceAccessKeyID string, sourceSecretKey string, targetAccessKeyID string, targetSecretKey string) (string, error)
+- func ListHostedZones(accessKeyID string, secretKey string) ([]*route53.HostedZone, error)
+- func CreateHostedZone(name string, accessKeyID string, secretKey string) (string, error)
+- func DestroyHostedZone(hostedZoneID string, accessKeyID string, secretKey string) (string, error)
