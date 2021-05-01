@@ -2,7 +2,7 @@ package maps
 
 import (
 	"fmt"
-	"github.com/sebpsdev/golibs/generic/arrays"
+	"github.com/sebps/golibs/generic/arrays"
 	"reflect"
 	"testing"
 )

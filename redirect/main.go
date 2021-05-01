@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sebpsdev/golibs/redirect/connectors"
+	"github.com/sebps/golibs/redirect/connectors"
 	"log"
 	"os"
 	"strconv"

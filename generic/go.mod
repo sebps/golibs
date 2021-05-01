@@ -1,3 +1,3 @@
-module github.com/sebpsdev/golibs/generic
+module github.com/sebps/golibs/generic
 
 go 1.14

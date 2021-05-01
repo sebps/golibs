@@ -11,7 +11,7 @@ Basic lib to implicitely redirect an incoming connexion to a target endpoint
 package main
 
 import (
-	"github.com/sebpsdev/golibs/redirect/connectors"
+	"github.com/sebps/golibs/redirect/connectors"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 
 ## CLI Usage
 ```
-$ go get github.com/sebpsdev/golibs/redirect
+$ go get github.com/sebps/golibs/redirect
 
 $ redirect --sourceHost=127.0.0.1 --sourcePort=3000 --targetHost=com.example.endpoint --targetPort=5000 --protocol=http
 ```

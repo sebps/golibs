@@ -18,7 +18,7 @@ type Subscriber interface {
 
   import (
     "fmt"
-    "github.com/sebpsdev/golibs/eventbus"
+    "github.com/sebps/golibs/eventbus"
     "time"
   )
 

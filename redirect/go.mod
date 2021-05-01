@@ -1,3 +1,3 @@
-module github.com/sebpsdev/golibs/redirect
+module github.com/sebps/golibs/redirect
 
 go 1.14

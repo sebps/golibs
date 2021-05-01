@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/sebpsdev/golibs/generic/arrays"
-	"github.com/sebpsdev/golibs/generic/maps"
-	"github.com/sebpsdev/golibs/generic/types"
+	"github.com/sebps/golibs/generic/arrays"
+	"github.com/sebps/golibs/generic/maps"
+	"github.com/sebps/golibs/generic/types"
 )
 
 func main() {

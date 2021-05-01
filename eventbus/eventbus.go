@@ -1,8 +1,8 @@
 package eventbus
 
 import (
-	"github.com/sebpsdev/golibs/generic/arrays"
-	"github.com/sebpsdev/golibs/generic/maps"
+	"github.com/sebps/golibs/generic/arrays"
+	"github.com/sebps/golibs/generic/maps"
 	"time"
 )
 

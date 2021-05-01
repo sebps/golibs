@@ -1,7 +1,3 @@
-module github.com/sebpsdev/golibs/cloud
+module github.com/sebps/golibs/cloud
 
 go 1.14
-
-require (
-	github.com/aws/aws-sdk-go v1.38.15
-)
