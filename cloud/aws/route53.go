@@ -22,6 +22,10 @@ func MigrateDomain(domain string, targetAccountID string, sourceAccessKeyID stri
 		return "", err
 	}
 
+	// migrate hosted zones
+
+	// change domain dns with new hosted zone !
+
 	return operationId, nil
 }
 
@@ -59,14 +63,29 @@ func AcceptDomainTransfer(domain string, password string, accessKeyID string, se
 	return *acceptOutput.OperationId, nil
 }
 
-func CancelDomainTransfer(domain string, accessKeyID string, secretKey string) (string, error) {
+func RejectDomainTransfer(domain string, accessKeyID string, secretKey string) (string, error) {
 	mySession := session.Must(session.NewSession())
 	targetClient := route53domains.New(mySession, aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")))
+
+	rejectParams := &route53domains.RejectDomainTransferFromAnotherAwsAccountInput{
+		DomainName: &domain,
+	}
+	rejectOutput, err := targetClient.RejectDomainTransferFromAnotherAwsAccount(rejectParams)
+	if err != nil {
+		return "", err
+	}
+
+	return *rejectOutput.OperationId, nil
+}
+
+func CancelDomainTransfer(domain string, accessKeyID string, secretKey string) (string, error) {
+	mySession := session.Must(session.NewSession())
+	client := route53domains.New(mySession, aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")))
 
 	cancelParams := &route53domains.CancelDomainTransferToAnotherAwsAccountInput{
 		DomainName: &domain,
 	}
-	cancelOutput, err := targetClient.CancelDomainTransferToAnotherAwsAccount(cancelParams)
+	cancelOutput, err := client.CancelDomainTransferToAnotherAwsAccount(cancelParams)
 	if err != nil {
 		return "", err
 	}
@@ -74,7 +93,30 @@ func CancelDomainTransfer(domain string, accessKeyID string, secretKey string) (
 	return *cancelOutput.OperationId, nil
 }
 
-func GetOperation(operationID string, accessKeyID string, secretKey string) (string, error) {
+func UpdateDomainNameservers(domain string, hosts []string, accessKeyID string, secretKey string) (string, error) {
+	mySession := session.Must(session.NewSession())
+	client := route53domains.New(mySession, aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")))
+
+	var nameServers []*route53domains.Nameserver
+	for i := 0; i < len(hosts); i++ {
+		nameServers = append(nameServers, &route53domains.Nameserver{
+			Name: &hosts[i],
+		})
+	}
+
+	updateDNSParams := &route53domains.UpdateDomainNameserversInput{
+		DomainName:  &domain,
+		Nameservers: nameServers,
+	}
+	updateNameserverOutput, err := client.UpdateDomainNameservers(updateDNSParams)
+	if err != nil {
+		return "", err
+	}
+
+	return *updateNameserverOutput.OperationId, nil
+}
+
+func GetDomainOperationStatus(operationID string, accessKeyID string, secretKey string) (string, error) {
 	mySession := session.Must(session.NewSession())
 	client := route53domains.New(mySession, aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")))
 
@@ -89,7 +131,7 @@ func GetOperation(operationID string, accessKeyID string, secretKey string) (str
 	return *operationDetailOutput.Status, nil
 }
 
-func ListOperations(accessKeyID string, secretKey string) ([]*route53domains.OperationSummary, error) {
+func ListDomainOperations(accessKeyID string, secretKey string) ([]*route53domains.OperationSummary, error) {
 	mySession := session.Must(session.NewSession())
 	client := route53domains.New(mySession, aws.NewConfig().WithRegion("us-east-1").WithCredentials(credentials.NewStaticCredentials(accessKeyID, secretKey, "")))
 
